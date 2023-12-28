@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New</title>
-</head>
-<body>
+<% layout("layouts/boilerplate") %>
     <h1>Add a new Campground!</h1>
     <form action="/campgrounds" method="POST">
         <label for="name">Name</label>
@@ -16,6 +9,3 @@
     </form>
     <br>
     <a href="/campgrounds">Go Back</a>
-    
-</body>
-</html>
