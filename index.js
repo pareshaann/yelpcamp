@@ -27,7 +27,7 @@ app.use(express.urlencoded({extended:true}))                    //req.body parse
 app.use(methodOverride("_method"))                              //used to send put and patch requests from html forms
 
 app.get("/", (req, res)=>{
-    res.render("campgrounds/home")
+    res.render("home")
 });
 app.get("/campgrounds", wrapAsync(async(req, res) => {
     const campgrounds = await Campground.find({});
@@ -37,6 +37,9 @@ app.get("/campgrounds/new",(req, res) => {
     res.render("campgrounds/new")
 })
 app.post("/campgrounds", wrapAsync(async(req,res) => {
+    if(!req.body.campground){               //Error thrown in absence of required model  properties like name, location etc 
+        throw new ExpressError("Incomplete data to create Campground!", 400)
+    }
     const newCampground = new Campground(req.body.campground);
     await newCampground.save();
     res.redirect(`/campgrounds/${newCampground._id}`)
@@ -62,8 +65,14 @@ app.delete("/campgrounds/:id", wrapAsync(async(req, res) => {
     res.redirect("/campgrounds")
 }))
 
-app.use((err, req, res, next) => {
-    res.send("something went fucking wrong")                // ERROR HANDLER
+app.all("*", (req, res, next) => {
+    next(new ExpressError("Page Not Found :(", 404))
+})
+
+app.use((err, req, res, next) => {              // ERROR HANDLER
+    const {status = 500} = err                
+    if(!err.message) err.message = "Oh no! Something went wrong :("
+    res.status(status).render("error", {err})
 })
 
 app.listen(port, ()=>{
