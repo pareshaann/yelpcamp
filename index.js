@@ -15,15 +15,20 @@ mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp')
         console.log(err);
     })
 
-const Campground = require("./models/campground")
+const Campground = require("./models/campground")           //import campground model
 
-app.set("view engine", "ejs")
-app.set("views", path.join(__dirname, "/views"))
+app.set("view engine", "ejs")                               // we don't have to type .ejs for ejs files anymore (hurray!)
+app.set("views", path.join(__dirname, "/views"))            
 app.engine("ejs", ejsMate)
 
-app.use(express.urlencoded({extended:true}))
-app.use(methodOverride("_method"))
+app.use(express.urlencoded({extended:true}))                    //req.body parser
+app.use(methodOverride("_method"))                              //used to send put and patch requests from html forms
 
+function wrapAsync(fn) {
+    return function(req, res, next){
+        fn(req, res, next).catch(e => next(e))                      // ERROR HANDLING FUNCTION (FOR ASYNC ERRORS)
+    }
+}
 
 app.get("/", (req, res)=>{
     res.render("home")
@@ -35,11 +40,11 @@ app.get("/campgrounds", async(req, res) => {
 app.get("/campgrounds/new",(req, res) => {
     res.render("campgrounds/new")
 })
-app.post("/campgrounds", async(req,res) => {
+app.post("/campgrounds", wrapAsync(async(req,res) => {
     const newCampground = new Campground(req.body.campground);
     await newCampground.save();
     res.redirect(`/campgrounds/${newCampground._id}`)
-})
+}))
 app.get("/campgrounds/:id", async(req, res) => {
     const { id } = req.params;
     const camp = await Campground.findById(id)
@@ -59,6 +64,10 @@ app.delete("/campgrounds/:id", async(req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id)
     res.redirect("/campgrounds")
+})
+
+app.use((err, req, res, next) => {
+    res.send("something went fucking wrong")                // ERROR HANDLER
 })
 
 app.listen(port, ()=>{
