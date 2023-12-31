@@ -4,7 +4,7 @@ const app = express();
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const {campgroundSchema} = require("./schemas") //destructured so we can add more schemas later on
+const {campgroundSchema} = require("./schemas") //destructured so we can add more schemas later on (Joi schema not mongoose schema)
 const ExpressError = require("./utils/ExpressError")   // import custom Error class
 const wrapAsync = require("./utils/wrapAsync")     // import async error handler
 
@@ -19,6 +19,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp')
     })
 
 const Campground = require("./models/campground")           //import campground mongoose model
+const Review = require("./models/review")
 
 app.set("view engine", "ejs")                               // we don't have to type .ejs for ejs files anymore (hurray!)
 app.set("views", path.join(__dirname, "/views"))            
@@ -39,6 +40,8 @@ const validateCampground = (req, res, next) => {                    //campground
     }    
 }
 
+// camp routes
+
 app.get("/", (req, res)=>{
     res.render("home")
 });
@@ -46,7 +49,7 @@ app.get("/campgrounds", wrapAsync(async(req, res) => {
     const campgrounds = await Campground.find({});
     res.render("campgrounds/index", {campgrounds});
 }));
-app.get("/campgrounds/new",(req, res) => {
+app.get("/campgrounds/new", (req, res) => {
     res.render("campgrounds/new")
 })
 app.post("/campgrounds", validateCampground, wrapAsync(async(req,res) => {
@@ -76,6 +79,17 @@ app.delete("/campgrounds/:id", wrapAsync(async(req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id)
     res.redirect("/campgrounds")
+}))
+
+// review routes
+
+app.post("/campgrounds/:id/reviews", wrapAsync(async(req, res) => {
+    const camp = await Campground.findById(req.params.id)
+    const review = new Review(req.body.review)
+    camp.reviews.push(review)
+    await review.save();
+    await camp.save();
+    res.redirect(`/campgrounds/${camp._id}`)
 }))
 
 app.all("*", (req, res, next) => {
