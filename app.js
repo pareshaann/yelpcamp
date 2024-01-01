@@ -22,6 +22,7 @@ app.engine("ejs", ejsMate)
 
 app.use(express.urlencoded({extended:true}))                    //req.body parser
 app.use(methodOverride("_method"))                              //used to send put and patch requests from html forms
+app.use(express.static(path.join(__dirname, "public")))
 
 
 const campRoutes = require("./routes/campgrounds")
