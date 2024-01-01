@@ -30,9 +30,10 @@ router.get("/new", (req, res) => {
 router.post("/", validateCampground, wrapAsync(async(req,res) => {
     // if(!req.body.campground){               //Error thrown in absence of required model  properties like name, location etc 
     //     throw new AppError("Incomplete data to create Campground!", 400)
-    // }                                                    
+    // }
     const newCampground = new Campground(req.body.campground);
     await newCampground.save();
+    req.flash("success", "Hurray! Successfully created a new campground.")
     res.redirect(`/campgrounds/${newCampground._id}`)
 }))
 router.get("/:id", wrapAsync(async(req, res) => {
@@ -48,11 +49,13 @@ router.get("/:id/edit", wrapAsync(async(req,res) => {
 router.put("/:id", validateCampground, wrapAsync(async(req, res) => {
     const { id } = req.params;
     const updatedCamp = await Campground.findByIdAndUpdate(id, req.body.campground, {new: true});
+    req.flash("success", "Successfully updated campground!")
     res.redirect(`/campgrounds/${updatedCamp._id}`);
 }));
 router.delete("/:id", wrapAsync(async(req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id)
+    req.flash("success", "Successfully deleted campground.")
     res.redirect("/campgrounds")
 }))
 

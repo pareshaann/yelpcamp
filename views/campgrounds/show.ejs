@@ -27,7 +27,6 @@
 
 
     <div class="col-6">
-
         <h2>Rate your Experience</h2>
         <form action="/campgrounds/<%= camp._id %>/reviews" class="mb-3 needs-validation" method="POST" novalidate>
             <div class="mb-3">
@@ -47,6 +46,7 @@
         </form>
 
         <div class="mb-3">
+            
             <h2>Reviews</h2>
             <% if(camp.reviews.length > 0) {%>
                 <% for(let i = 0; i < camp.reviews.length; i++){ %>

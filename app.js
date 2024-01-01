@@ -4,7 +4,11 @@ const app = express();
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const session = require("express-session")
+const flash = require("connect-flash")
 const AppError = require("./utils/AppError")   // import custom Error class
+const campRoutes = require("./routes/campgrounds")
+const reviewRoutes = require("./routes/reviews")
 
 const mongoose = require("mongoose");
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp')
@@ -24,10 +28,27 @@ app.use(express.urlencoded({extended:true}))                    //req.body parse
 app.use(methodOverride("_method"))                              //used to send put and patch requests from html forms
 app.use(express.static(path.join(__dirname, "public")))
 
+const sessionConfig = {
+    secret:"not the best secret :(", 
+    resave: false, 
+    saveUninitialized: true,
+    cookie: {
+        HttpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+app.use(session(sessionConfig))
+app.use(flash())
 
-const campRoutes = require("./routes/campgrounds")
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success")
+    res.locals.error = req.flash("error")
+    next();
+})
+
+
 app.use("/campgrounds", campRoutes)
-const reviewRoutes = require("./routes/reviews")
 app.use("/campgrounds/:id/reviews", reviewRoutes)
 
 app.get("/", (req, res)=>{
