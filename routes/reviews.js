@@ -9,19 +9,20 @@ const Review = require("../models/review")              //import review mongoose
 
 const {reviewSchema} = require("../schemas")            // import review Joi schema for validation
 
-const {validateReview} = require("../middleware")       // import validation middleware
+const {validateReview, isLoggedIn, isReviewAuthor} = require("../middleware")       // import validation middleware
 
 
-router.post("/", validateReview, wrapAsync(async(req, res) => {
+router.post("/", isLoggedIn, validateReview, wrapAsync(async(req, res) => {
     const camp = await Campground.findById(req.params.id)
     const review = new Review(req.body.review)
+    review.author = req.user._id;
     camp.reviews.push(review)
     await review.save();
     await camp.save();
     req.flash("success", "Review added!")
     res.redirect(`/campgrounds/${camp._id}`)
 }));
-router.delete("/:revId", wrapAsync(async(req, res) => {
+router.delete("/:revId", isLoggedIn, isReviewAuthor, wrapAsync(async(req, res) => {
     const {id, revId} = req.params
     /* We have to do two things here: 
         1. Delete the review (easy part)
