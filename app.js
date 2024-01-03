@@ -3,12 +3,18 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const methodOverride = require("method-override");
+
 const ejsMate = require("ejs-mate");
+
 const session = require("express-session")
 const flash = require("connect-flash")
+
 const AppError = require("./utils/AppError")   // import custom Error class
+
 const campRoutes = require("./routes/campgrounds")
 const reviewRoutes = require("./routes/reviews")
+const userRoutes = require("./routes/users")
+
 const passport = require("passport")
 const LocalStrategy = require("passport-local")
 const User = require("./models/user")
@@ -51,7 +57,8 @@ passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
-app.use((req, res, next) => {
+app.use((req, res, next) => {                               // accessible to ALL routes
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash("success")
     res.locals.error = req.flash("error")
     next();
@@ -60,6 +67,7 @@ app.use((req, res, next) => {
 
 app.use("/campgrounds", campRoutes)
 app.use("/campgrounds/:id/reviews", reviewRoutes)
+app.use("/", userRoutes)
 
 app.get("/", (req, res)=>{
     res.render("home")
