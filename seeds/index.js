@@ -22,6 +22,7 @@ const seeder = async()=>{
         const randomNumber = Math.floor(Math.random() * 150)
         const camp = new Campground({
             name: `${randomElement(descriptors)} ${randomElement(places)}`,
+            author: "65951c29dce4086d5b8cb9e4",
             location: `${cities[randomNumber].city}, ${cities[randomNumber].state}`,
             image: "https://source.unsplash.com/collection/18213269",
             price: Math.floor(Math.random() * 2000) + 1,

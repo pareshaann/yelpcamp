@@ -1,7 +1,6 @@
 <% layout("layouts/boilerplate") %>
 <div class="row">
 
-
     <div class="col-6">
         <div class="card mb-3">
             <img src="<%= camp.image %>" class="card-img-top" alt="...">
@@ -11,14 +10,18 @@
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Based in <span class="text-secondary"><%= camp.location %> </span></li>
+                <li class="list-group-item">Submitted by <span class="text-secondary"><%= camp.author.username %></span></li>
                 <li class="list-group-item text-danger">&#8377;<%= camp.price %>/night</li>
             </ul>
+            <% if(currentUser && camp.author.equals(currentUser._id)) {%>
             <div class="card-body">
                 <a href="<%= camp.id %>/edit" class="card-link btn btn-primary">Edit</a>
                 <form class="d-inline" action="/campgrounds/<%= camp._id %>?_method=DELETE" method="POST">
                     <button class="btn btn-danger">Delete</button>
                 </form>
             </div>
+            <%} %>
+
             <div class="card-footer text-body-secondary">
                 2 days ago
             </div>

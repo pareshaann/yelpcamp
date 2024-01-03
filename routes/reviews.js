@@ -9,15 +9,8 @@ const Review = require("../models/review")              //import review mongoose
 
 const {reviewSchema} = require("../schemas")            // import review Joi schema for validation
 
-const validateReview = (req, res, next) => {                    // review validator middleware using JOI
-    const {error} = reviewSchema.validate(req.body)
-    if(error){
-        const msg = error.details.map(el => el.message).join(", ")
-        throw new AppError(msg, 400)
-    } else {
-        next();
-    }
-}
+const {validateReview} = require("../middleware")       // import validation middleware
+
 
 router.post("/", validateReview, wrapAsync(async(req, res) => {
     const camp = await Campground.findById(req.params.id)
