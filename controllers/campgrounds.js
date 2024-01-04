@@ -17,7 +17,6 @@ module.exports.createNewCampground = async(req,res) => {
     }))
     newCampground.author = req.user._id;
     await newCampground.save();
-    console.log(newCampground)
     req.flash("success", "Hurray! Successfully created a new campground.")
     res.redirect(`/campgrounds/${newCampground._id}`)
 }
@@ -30,6 +29,7 @@ module.exports.renderCampground = async(req, res) => {
             path: "author"
         }
     }).populate("author")
+    console.log(camp)
     if(!camp) {
         req.flash("error", "Cannot find that campground!");
         return res.redirect("/campgrounds");
