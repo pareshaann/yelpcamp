@@ -4,7 +4,12 @@ const User = require("./user")
 
 const campgroundSchema = new mongoose.Schema({
     name: String,
-    image: String,
+    images: [
+      {
+        url: String,
+        filename: String
+      }
+    ],
     price: Number,
     description: String,                                //hello test    
     location: String,

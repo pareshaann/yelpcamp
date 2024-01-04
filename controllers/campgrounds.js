@@ -10,12 +10,14 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createNewCampground = async(req,res) => {
-    // if(!req.body.campground){               //Error thrown in absence of required model  properties like name, location etc 
-    //     throw new AppError("Incomplete data to create Campground!", 400)
-    // }
     const newCampground = new Campground(req.body.campground);
+    newCampground.images = req.files.map(f => ({
+        url: f.path, 
+        filename: f.filename
+    }))
     newCampground.author = req.user._id;
     await newCampground.save();
+    console.log(newCampground)
     req.flash("success", "Hurray! Successfully created a new campground.")
     res.redirect(`/campgrounds/${newCampground._id}`)
 }
