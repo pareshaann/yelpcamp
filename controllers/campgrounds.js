@@ -21,8 +21,7 @@ module.exports.createNewCampground = async(req,res) => {
         query: location,                                        //from the docs
         limit: 1
     }).send();
-    console.log(result.body.features[0].geometry.coordinates)
-        
+    req.body.campground.geometry = result.body.features[0].geometry
     const newCampground = new Campground(req.body.campground);
     newCampground.images = req.files.map(f => ({
         url: f.path, 
