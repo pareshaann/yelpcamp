@@ -69,8 +69,18 @@
                                 Please enter a description.
                             </div>
                         </div>
+                        <div class="mb-3">
+                            
+                            <% for(let i = 0; i < camp.images.length; i++) {%>
+                                <img src="<%= camp.images[i].thumbnail %>" class="img-thumbnail" alt="">
+                                <div class="form-check inline">
+                                    <input type="checkbox" id="image-<%= i %>" name="deleteImages[]" value="<%= camp.images[i].filename %>">
+                                    <label for="image-<%= i  %>">Delete?</label>
+                                </div>
+                                <% } %>
+                        </div>
                         <div class="text-center mb-3">
-                            <button class="btn btn-success">Submit</button>
+                            <button class="btn btn-success">Update Campground</button>
                         </div>
                     </form>
                     <br>

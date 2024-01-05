@@ -1,4 +1,5 @@
 const Campground = require("../models/campground")           //import campground mongoose model
+const {cloudinary} = require("../cloudinary")
 
 module.exports.index = async(req, res) => {
     const campgrounds = await Campground.find({});
@@ -50,7 +51,13 @@ module.exports.updateCampground = async(req, res) => {
         filename: f.filename
     })))
     updatedCamp.images = images;
-    await updatedCamp.save()
+    await updatedCamp.save();
+    if(req.body.deleteImages) {
+        for(let i = 0; i < req.body.deleteImages.length; i++) {
+            await cloudinary.uploader.destroy(req.body.deleteImages[i])
+        }
+        await updatedCamp.updateOne({$pull:{images:{filename:{$in: req.body.deleteImages}}}})
+    }
     req.flash("success", "Successfully updated campground!")
     res.redirect(`/campgrounds/${updatedCamp._id}`);
 }
