@@ -1,6 +1,9 @@
 const Campground = require("../models/campground")           //import campground mongoose model
 const {cloudinary} = require("../cloudinary")
 
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');                  // from the docs
+const geocodingClient = mbxGeocoding({ accessToken: process.env.MAPBOX_TOKEN });
+
 module.exports.index = async(req, res) => {
     const campgrounds = await Campground.find({});
     res.render("campgrounds/index", {campgrounds});
@@ -11,6 +14,15 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createNewCampground = async(req,res) => {
+    
+    
+    const location = req.body.campground.location
+    const result = await geocodingClient.forwardGeocode({
+        query: location,                                        //from the docs
+        limit: 1
+    }).send();
+    console.log(result.body.features[0].geometry.coordinates)
+        
     const newCampground = new Campground(req.body.campground);
     newCampground.images = req.files.map(f => ({
         url: f.path, 
