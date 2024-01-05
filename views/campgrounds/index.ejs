@@ -5,9 +5,15 @@
     <% for(let i = 0; i < campgrounds.length; i++){ %>
         <div class="card my-3">
             <div class="row">
+                <% if(campgrounds[i].images.length) {%>
                 <div class="col-md-4">
                     <img src="<%= campgrounds[i].images[0].url %>" class="img-fluid" alt="">
                 </div>
+                <%} else{%>
+                    <div class="col-md-4">
+                        <img src="https://res.cloudinary.com/ddmjczaqq/image/upload/v1704386325/YelpCamp/v7t7pe1pdebeo2i1ctf6.jpg" class="img-fluid" alt="">
+                    </div>
+                <%} %>
                 <div class="col-md-8">
                     <h3 class="card-title text-center"> <%= campgrounds[i].name %> </h3>
                     <p class="card-text"> <%= campgrounds[i].description  %> </p>

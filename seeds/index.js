@@ -39,7 +39,8 @@ const seeder = async()=>{
             ],
             location: `${cities[randomNumber].city}, ${cities[randomNumber].state}`,
             price: Math.floor(Math.random() * 2000) + 1,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero porro, corrupti impedit at aperiam sapiente amet accusantium, molestias nobis corporis nesciunt quo itaque quaerat fugiat cupiditate animi enim dignissimos in."
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero porro, corrupti impedit at aperiam sapiente amet accusantium, molestias nobis corporis nesciunt quo itaque quaerat fugiat cupiditate animi enim dignissimos in.",
+            geometry: { type: 'Point', coordinates: [ 77.469981, 12.999758 ] }
         })
         await camp.save();  
     }
