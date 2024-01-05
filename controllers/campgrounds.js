@@ -29,7 +29,6 @@ module.exports.renderCampground = async(req, res) => {
             path: "author"
         }
     }).populate("author")
-    console.log(camp)
     if(!camp) {
         req.flash("error", "Cannot find that campground!");
         return res.redirect("/campgrounds");
@@ -46,6 +45,12 @@ module.exports.renderEditForm = async(req,res) => {
 module.exports.updateCampground = async(req, res) => {
     const {id} = req.params
     const updatedCamp = await Campground.findByIdAndUpdate(id, req.body.campground, {new: true});
+    const images = updatedCamp.images.concat(req.files.map(f => ({
+        url: f.path, 
+        filename: f.filename
+    })))
+    updatedCamp.images = images;
+    await updatedCamp.save()
     req.flash("success", "Successfully updated campground!")
     res.redirect(`/campgrounds/${updatedCamp._id}`);
 }

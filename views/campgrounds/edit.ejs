@@ -6,7 +6,7 @@
                     Edit Campground
                 </h1>
                 <div class="col-6 offset-3">
-                    <form action="/campgrounds/<%= camp._id %>?_method=PUT" method="POST" novalidate class="needs-validation">
+                    <form action="/campgrounds/<%= camp._id %>?_method=PUT" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label class="form-label" for="name">Name</label>
                             <input class="form-control" type="text" id="name" name="campground[name]" value="<%= camp.name %>" required>
@@ -42,13 +42,21 @@
                         </div>
                         
                         <div class="mb-3">
-                            <label class="form-label" for="image">Image Url</label>
-                            <input class="form-control" type="text" id="image" name="campground[image]" value="<%= camp.image %>" required> 
+                            <!-- <input class="form-control" type="text" id="image" name="campground[image]" value="<%= camp.image %>" required> 
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                             <div class="invalid-feedback">
                                 Please add an image.
+                            </div> -->
+                            <div class="mb-3">
+                                <label for="images">Add more images</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="images" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="image" multiple>
+                                </div>
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
                             </div>
                         </div>
                         <div class="mb-3">
