@@ -18,7 +18,7 @@ const randomElement = (arr) => {
 
 const seeder = async()=>{
     await Campground.deleteMany();
-    for(let i = 0; i < 50; i++){
+    for(let i = 0; i < 400; i++){
         const randomNumber = Math.floor(Math.random() * 150)
         const camp = new Campground({
             name: `${randomElement(descriptors)} ${randomElement(places)}`,

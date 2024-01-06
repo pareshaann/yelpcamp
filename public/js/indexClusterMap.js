@@ -2,11 +2,12 @@ mapboxgl.accessToken = mapToken;
 const map = new mapboxgl.Map({
     container: 'map',
     // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-    style: 'mapbox://styles/mapbox/dark-v11',
+    style: 'mapbox://styles/mapbox/light-v11',
     center: [78.9629, 20.5937],
-    zoom: 3
+    zoom: 4
 });
- 
+
+
 map.on('load', () => {
     // Add a new source from our GeoJSON data and
     // set the 'cluster' option to true. GL-JS will
@@ -35,19 +36,19 @@ map.on('load', () => {
             'circle-color': [
                 'step',
                 ['get', 'point_count'],
-                '#51bbd6',
-                100,
-                '#f1f075',
-                750,
-                '#f28cb1'
+                '#84CC16',
+                20,
+                '#4D7C0F',
+                50,
+                '#365314'
             ],
             'circle-radius': [
                 'step',
                 ['get', 'point_count'],
                 20,
-                100,
+                20,
                 30,
-                750,
+                50,
                 40
             ]
         }
@@ -71,7 +72,7 @@ map.on('load', () => {
         source: 'campgrounds',
         filter: ['!', ['has', 'point_count']],
         paint: {
-            'circle-color': '#11b4da',
+            'circle-color': '#A3E635',
             'circle-radius': 4,
             'circle-stroke-width': 1,
             'circle-stroke-color': '#fff'
@@ -102,24 +103,15 @@ map.on('load', () => {
     // the location of the feature, with
     // description HTML from its properties.
     map.on('click', 'unclustered-point', (e) => {
-        console.log(e.features[0])
         const coordinates = e.features[0].geometry.coordinates.slice();
-        // const mag = e.features[0].properties.mag;
-        // const tsunami =
-        // e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
-        
-        // Ensure that if the map is zoomed out such that
-        // multiple copies of the feature are visible, the
-        // popup appears over the copy being pointed to.
+        const popUpText = e.features[0].properties.popUpMarkup;
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
         
         new mapboxgl.Popup()
             .setLngLat(coordinates)
-            .setHTML(
-            `magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`
-        )
+            .setHTML(popUpText)
         .addTo(map);
     });
     

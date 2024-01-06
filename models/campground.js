@@ -11,6 +11,12 @@ imageSchema.virtual("thumbnail").get(function(){
   return this.url.replace("/upload", "/upload/w_200")
 })
 
+const opts = {
+  toJSON: {
+    virtuals: true
+  }
+}
+
 const campgroundSchema = new mongoose.Schema({
     name: String,
     images: [imageSchema],
@@ -38,7 +44,14 @@ const campgroundSchema = new mongoose.Schema({
         required: true
       } 
     }
-});
+}, opts);
+
+campgroundSchema.virtual("properties.popUpMarkup").get(function(){
+  return `
+    <strong> <a href="/campgrounds/${this._id}">${this.name}</a> </strong>
+    <p> ${this.description.substring(0, 30)}... </p>
+  `
+})
 
 campgroundSchema.post("findOneAndDelete", async function(deletedCamp) {
   if(deletedCamp){
