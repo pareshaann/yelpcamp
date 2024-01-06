@@ -2,38 +2,38 @@
 <link rel="stylesheet" href="/css/starability.css">
 <div class="row">
     
-    <div class="col-6">
+    <div class="col-md-6">
         
         <div class="card mb-3">
 
             <div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
 
 
-                    <div class="carousel-inner">
+                <div class="carousel-inner">
 
+                
+                    <% for(let i = 0; i<camp.images.length; i++) {%>
                     
-                        <% for(let i = 0; i<camp.images.length; i++) {%>
-                        
-                            <div class="carousel-item <%= i === 0 ? "active" : "" %>">
-                                <img src="<%= camp.images[i].url %>" class="d-block w-100" alt="...">
-                            </div>
-                        
-                        <%} %>
-                    </div>
+                        <div class="carousel-item <%= i === 0 ? "active" : "" %>">
+                            <img src="<%= camp.images[i].url %>" class="d-block w-100" alt="...">
+                        </div>
                     
-                    <% if(camp.images.length > 1) {%>
-
-                        <button class="carousel-control-prev" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                        </button>
-
-                        <button class="carousel-control-next" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                        </button>
-                        
                     <%} %>
+                </div>
+                
+                <% if(camp.images.length > 1) {%>
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                    </button>
+
+                    <button class="carousel-control-next" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                    </button>
+                    
+                <%} %>
 
 
             </div>
@@ -64,8 +64,8 @@
     </div>
 
 
-    <div class="col-6">
-        <div id='map' style='width: 100%; height: 300px;'></div>
+    <div class="col-md-6">
+        <div id="show-map" class="mb-2"></div>
         <% if(currentUser) {%>
         <h2>Rate your Experience</h2>
         <form action="/campgrounds/<%= camp._id %>/reviews" class="mb-3 needs-validation" method="POST" novalidate>
