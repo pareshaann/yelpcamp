@@ -2,7 +2,7 @@ if (process.env.NODE_ENV !== "production") {
     require("dotenv").config()
 }
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -28,7 +28,8 @@ const helmet = require("helmet")        // basic security
 
 const MongoDBStore = require("connect-mongo")
 
-const dbUrl = process.env.DB_URL;
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp';
+const secret = process.env.SECRET || 'not the best secret :('
 
 // 'mongodb://127.0.0.1:27017/yelp-camp'
 const mongoose = require("mongoose");
@@ -100,7 +101,7 @@ const store = MongoDBStore.create({
     mongoUrl: dbUrl,
     touchAfter: 24 * 60 * 60,
     crypto: {
-        secret: 'not the best secret :('
+        secret
     }
 })
 
