@@ -26,6 +26,11 @@ const User = require("./models/user")
 const mongoSanitize = require("express-mongo-sanitize")         // to prevent mongo injections
 const helmet = require("helmet")        // basic security
 
+const MongoDBStore = require("connect-mongo")
+
+// const dbUrl = process.env.DB_URL;
+
+// 'mongodb://127.0.0.1:27017/yelp-camp'
 const mongoose = require("mongoose");
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp')
     .then(() => {
@@ -91,8 +96,21 @@ app.use(
     })
 );
 
+const store = MongoDBStore.create({
+    mongoUrl: "mongodb://127.0.0.1:27017/yelp-camp",
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'not the best secret :('
+    }
+})
+
+store.on("error", function(err){
+    console.log("Session Store Error!", err)
+})
+
 
 const sessionConfig = {
+    store,
     name: "session",
     secret:"not the best secret :(", 
     resave: false, 
