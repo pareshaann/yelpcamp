@@ -1,8 +1,8 @@
 # YelpCamp! 
   A platform to view campgrounds, review them as well as upload your own! You can look at the working demo [here](https://yelpcamp-28s0.onrender.com/)
 
-# Installation
-  Here are the instructions to install this project to your remote device:
+### Installation
+   Follow these steps to install this project to your remote device:
 
   Clone the repository in your remote device
   ```bash
@@ -12,5 +12,15 @@ git clone https://github.com/sh66n/yelpcamp.git
   ```bash
 npm install
 ```
-# Built with
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
+  Run the app
+  ```bash
+node app.js
+```
+### Built with
+* [Express](https://expressjs.com/)
+* [EJS](https://ejs.co/)
+* [MongoDB](https://www.mongodb.com/)
+* [Mongoose](https://mongoosejs.com/)
+* [EJS mate](https://www.npmjs.com/package/ejs-mate)
+* [Passport](https://www.passportjs.org/)
+* [Render](https://render.com/)
